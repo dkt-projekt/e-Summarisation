@@ -73,9 +73,9 @@
 		</snapshotRepository>
 	</distributionManagement>
         <scm>
-                <connection>scm:git:git@github.com:dkt-projekt/e-SMT.git</connection>
-                <url>scm:git:git@github.com/dkt-projekt/e-SMT.git</url>
-                <developerConnection>scm:git:git@github.com:dkt-projekt/e-SMT.git</developerConnection>
+                <connection>scm:git:git@github.com:dkt-projekt/e-summarisation.git</connection>
+                <url>scm:git:git@github.com/dkt-projekt/e-summarisation.git</url>
+                <developerConnection>scm:git:git@github.com:dkt-projekt/e-summarisation.git</developerConnection>
                 <tag>HEAD</tag>
         </scm>
 </project>
