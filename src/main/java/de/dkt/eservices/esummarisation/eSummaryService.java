@@ -18,7 +18,7 @@ public class eSummaryService {
 
 	// hard-coded public variables: the location of the summarize.py tool
     //public String pwd = "/Users/ansr01/Software/summarise/summarize.py/"; // for local machine
-    public String pwd = "/usr/local/summarisation/WS_dkt/"; // for dkt server
+    public String pwd = "/usr/local/summarisation/summarize.py/"; // for dkt server
     
 	/**
 	 * Method to send a shell script execution command summarise to the server
@@ -33,7 +33,14 @@ public class eSummaryService {
         
         File f = new File(pwd, "tempFile");  // temporary file created in pwd
         String command;
-
+        String langName = new String();
+        if (dLang.equalsIgnoreCase("en")){
+        	langName = new String ("english");
+        }
+        if (dLang.equalsIgnoreCase("de")){
+        	langName = new String ("german");
+        }
+        
         //System.out.println("I have landed\n");
 
         
@@ -47,7 +54,7 @@ public class eSummaryService {
 
         // The actual command to call the shell script with the 1 arguments: file
         // TODO: add language parameter
-        command = pwd + "summarize.py " + f.getAbsoluteFile();
+        command = "sh " + pwd + "run_summarize.sh -i " + f.getAbsoluteFile() + " -l " + langName;
      
         
 

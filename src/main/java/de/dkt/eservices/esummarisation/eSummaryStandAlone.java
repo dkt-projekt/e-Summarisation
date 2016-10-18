@@ -49,9 +49,6 @@ import java.util.Map;
 @RestController
 public class eSummaryStandAlone extends BaseRestController {
     Logger logger = Logger.getLogger(eSummaryStandAlone.class);
-    
-    @Autowired
-    eSummaryService sumService;
 
     @Autowired
     RestHelper restHelper;
@@ -93,6 +90,8 @@ public class eSummaryStandAlone extends BaseRestController {
 
             // get shell script (with inputString, language) and write result to resultString
             // eventially replace with a RESTful service endpoint
+            System.out.println("I am in summarisation 1");
+            eSummaryService sumService = new eSummaryService();
             String resultString = sumService.executeCommandSummarise(inputString, language);
           
 
@@ -102,7 +101,9 @@ public class eSummaryStandAlone extends BaseRestController {
             }
 
             Literal literal = model.createLiteral(resultString, language);
+            System.out.println("@@Status: " + literal.getString());
             subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            System.out.println("I am in summarisation 2");
 
             return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
         }catch (FREMEHttpException e){
