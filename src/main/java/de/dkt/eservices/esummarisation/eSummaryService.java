@@ -40,6 +40,9 @@ public class eSummaryService {
         if (dLang.equalsIgnoreCase("de")){
         	langName = new String ("german");
         }
+	if (dLang.equalsIgnoreCase("es")){
+        	langName = new String ("spanish");
+        }
         
         //System.out.println("I have landed\n");
 
