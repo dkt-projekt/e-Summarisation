@@ -35,6 +35,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import de.dkt.common.niftools.NIFWriter;
+import de.dkt.common.niftools.DKTNIF;
 import de.dkt.common.niftools.NIFReader;
 
 import java.util.ArrayList;
@@ -67,10 +68,33 @@ public class eSummaryStandAlone extends BaseRestController {
             @RequestHeader(value = "Accept", required = false) String acceptHeader,
             @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
             @RequestParam(value = "input", required = false) String input,
+            @RequestParam(value = "i", required = false) String i,
             @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "prefix", required = false) String prefix,
+			@RequestParam(value = "p", required = false) String p,
+			@RequestParam(value = "informat", required = false) String informat,
+			@RequestParam(value = "f", required = false) String f,
+			@RequestParam(value = "outformat", required = false) String outformat,
+			@RequestParam(value = "o", required = false) String o,
             @RequestBody (required = false) String postBody,
             @RequestParam Map<String, String> allParams) {
 
+    	 if (input == null) {
+ 			input = i;
+ 		}
+ 		if (informat == null) {
+ 			informat = f;
+ 		}
+ 		if (outformat == null) {
+ 			outformat = o;
+ 		}
+ 		if (prefix == null) {
+ 			prefix = p;
+ 		}
+         if (prefix == null || prefix.equalsIgnoreCase("")){
+ 			prefix = DKTNIF.getDefaultPrefix();
+ 		}
+    	
         NIFParameterSet nifParameters = restHelper.normalizeNif(postBody,
                 acceptHeader, contentTypeHeader, allParams, false);
 
@@ -79,7 +103,7 @@ public class eSummaryStandAlone extends BaseRestController {
         try {
             if (nifParameters.getInformat().equals(RDFConstants.RDFSerialization.PLAINTEXT)) {
                 model = ModelFactory.createDefaultModel();
-                rdfConversionService.plaintextToRDF(model, nifParameters.getInput(), null, nifParameterFactory.getDefaultPrefix());
+                rdfConversionService.plaintextToRDF(model, nifParameters.getInput(), null, prefix);
             } else {
                 model = rdfConversionService.unserializeRDF(postBody, nifParameters.getInformat());
             }
