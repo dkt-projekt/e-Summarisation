@@ -11,7 +11,7 @@ The system is constantly being updated and newer functionalities will be added.
 
 ## Endpoint
 
-http://api.digitale-kuratierung.de/api/e-summarisation
+https://api.digitale-kuratierung.de/api/e-summarisation
 
 ### Input
 The API conforms to the general NIF API specifications. For more details, see:
@@ -29,7 +29,7 @@ For now, only the following language pairs are supported. English (`en`), German
 A document in NIF format.
 
 Example cURL post for e-smt:
-`curl -X POST --header "Content-type:text/plain" -d 'Text to summarize.' "http://api.digitale-kuratierung.de/api/e-summarisation?language=en"`
+`curl -X POST --header "Content-type:text/plain" -d 'Text to summarize.' "https://api.digitale-kuratierung.de/api/e-summarisation?language=en"`
 
 
 ## Notes on DKT Summarisation Software
