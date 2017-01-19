@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>de.dkt</groupId>
     <artifactId>e-summarisation</artifactId>
-    <version>0.5</version>
+    <version>0.6-SNAPSHOT</version>
 
     <parent>
 	<groupId>eu.freme-project</groupId>
@@ -71,6 +71,6 @@
                 <connection>scm:git:git@github.com:dkt-projekt/e-summarisation.git</connection>
                 <url>scm:git:git@github.com/dkt-projekt/e-summarisation.git</url>
                 <developerConnection>scm:git:git@github.com:dkt-projekt/e-summarisation.git</developerConnection>
-                <tag>e-summarisation-0.5</tag>
+                <tag>e-summarisation-0.4</tag>
         </scm>
 </project>
