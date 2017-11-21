@@ -70,6 +70,8 @@ public class eSummaryStandAlone extends BaseRestController {
             @RequestParam(value = "input", required = false) String input,
             @RequestParam(value = "i", required = false) String i,
             @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "algorithm", required = false) String algorithm,
+            @RequestParam(value = "length", required = false) int sumlength,
             @RequestParam(value = "prefix", required = false) String prefix,
 			@RequestParam(value = "p", required = false) String p,
 			@RequestParam(value = "informat", required = false) String informat,
@@ -110,13 +112,19 @@ public class eSummaryStandAlone extends BaseRestController {
 
             Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
             Resource subject = firstPlaintext.getSubject();
-            String inputString = firstPlaintext.getObject().asLiteral().getString();
+            String inputString = null;
+            if(acceptHeader.equalsIgnoreCase("plain/text")){
+            	inputString = postBody;
+            }
+            else {
+				inputString = firstPlaintext.getObject().asLiteral().getString();
+			}
 
-            // get shell script (with inputString, language) and write result to resultString
-            // eventially replace with a RESTful service endpoint
+            // get shell script (with inputString, language, algorithm, summarylength) and write result to resultString
+            // eventually replace with a RESTful service endpoint
             //System.out.println("I am in summarisation 1");
             eSummaryService sumService = new eSummaryService();
-            String resultString = sumService.executeCommandSummarise(inputString, language);
+            String resultString = sumService.executeCommandSummarise(inputString, language, algorithm, sumlength, true); //boolean indicates is single document
           
 
 
@@ -139,4 +147,171 @@ public class eSummaryStandAlone extends BaseRestController {
         }
     }
     
+    // endpoint for multidocument summarisation
+    @RequestMapping(value = "/e-summarisation/multidoc", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<String> summarisemultidoc(
+            @RequestHeader(value = "Accept", required = false) String acceptHeader,
+            @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
+            @RequestParam(value = "input", required = false) String input,
+            @RequestParam(value = "i", required = false) String i,
+            @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "algorithm", required = false) String algorithm,
+            @RequestParam(value = "length", required = false) int sumlength,
+            @RequestParam(value = "prefix", required = false) String prefix,
+			@RequestParam(value = "p", required = false) String p,
+			@RequestParam(value = "informat", required = false) String informat,
+			@RequestParam(value = "f", required = false) String f,
+			@RequestParam(value = "outformat", required = false) String outformat,
+			@RequestParam(value = "o", required = false) String o,
+            @RequestBody (required = false) String postBody,
+            @RequestParam Map<String, String> allParams) {
+
+    	 if (input == null) {
+ 			input = i;
+ 		}
+ 		if (informat == null) {
+ 			informat = f;
+ 		}
+ 		if (outformat == null) {
+ 			outformat = o;
+ 		}
+ 		if (prefix == null) {
+ 			prefix = p;
+ 		}
+         if (prefix == null || prefix.equalsIgnoreCase("")){
+ 			prefix = DKTNIF.getDefaultPrefix();
+ 		}
+    	
+        NIFParameterSet nifParameters = restHelper.normalizeNif(postBody,
+                acceptHeader, contentTypeHeader, allParams, false);
+
+        Model model = null;
+
+        try {
+            if (nifParameters.getInformat().equals(RDFConstants.RDFSerialization.PLAINTEXT)) {
+                model = ModelFactory.createDefaultModel();
+                rdfConversionService.plaintextToRDF(model, nifParameters.getInput(), null, prefix);
+            } else {
+                model = rdfConversionService.unserializeRDF(postBody, nifParameters.getInformat());
+            }
+
+            Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
+            Resource subject = firstPlaintext.getSubject();
+            String inputString = null;
+            if(acceptHeader.equalsIgnoreCase("plain/text")){
+            	inputString = postBody;
+            }
+            else {
+				inputString = firstPlaintext.getObject().asLiteral().getString();
+			}
+
+            // get shell script (with inputString, language, algorithm, summarylength) and write result to resultString
+            // eventually replace with a RESTful service endpoint
+            //System.out.println("I am in summarisation 1");
+            eSummaryService sumService = new eSummaryService();
+            String resultString = sumService.executeCommandSummarise(inputString, language, algorithm, sumlength, false); //boolean indicates not single document
+          
+
+
+            if (!model.getNsPrefixMap().containsValue(RDFConstants.itsrdfPrefix)) {
+                model.setNsPrefix("itsrdf", RDFConstants.itsrdfPrefix);
+            }
+
+            Literal literal = model.createLiteral(resultString, language);
+            //System.out.println("@@Status: " + literal.getString());
+            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            //System.out.println("I am in summarisation 2");
+
+            return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
+        }catch (FREMEHttpException e){
+            logger.error("Error", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error", e);
+            throw new BadRequestException(e.getMessage());
+        }
+    }
+    
+    // endpoint for abstractive summarisation: prototype
+    @RequestMapping(value = "/e-summarisation/abstract", method = {RequestMethod.POST, RequestMethod.GET})
+    public ResponseEntity<String> summariseabs(
+            @RequestHeader(value = "Accept", required = false) String acceptHeader,
+            @RequestHeader(value = "Content-Type", required = false) String contentTypeHeader,
+            @RequestParam(value = "input", required = false) String input,
+            @RequestParam(value = "i", required = false) String i,
+            @RequestParam(value = "language", required = false) String language,
+            @RequestParam(value = "prefix", required = false) String prefix,
+			@RequestParam(value = "p", required = false) String p,
+			@RequestParam(value = "informat", required = false) String informat,
+			@RequestParam(value = "f", required = false) String f,
+			@RequestParam(value = "outformat", required = false) String outformat,
+			@RequestParam(value = "o", required = false) String o,
+            @RequestBody (required = false) String postBody,
+            @RequestParam Map<String, String> allParams) {
+
+    	 if (input == null) {
+ 			input = i;
+ 		}
+ 		if (informat == null) {
+ 			informat = f;
+ 		}
+ 		if (outformat == null) {
+ 			outformat = o;
+ 		}
+ 		if (prefix == null) {
+ 			prefix = p;
+ 		}
+         if (prefix == null || prefix.equalsIgnoreCase("")){
+ 			prefix = DKTNIF.getDefaultPrefix();
+ 		}
+    	
+        NIFParameterSet nifParameters = restHelper.normalizeNif(postBody,
+                acceptHeader, contentTypeHeader, allParams, false);
+
+        Model model = null;
+
+        try {
+            if (nifParameters.getInformat().equals(RDFConstants.RDFSerialization.PLAINTEXT)) {
+                model = ModelFactory.createDefaultModel();
+                rdfConversionService.plaintextToRDF(model, nifParameters.getInput(), null, prefix);
+            } else {
+                model = rdfConversionService.unserializeRDF(postBody, nifParameters.getInformat());
+            }
+
+            Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
+            Resource subject = firstPlaintext.getSubject();
+            String inputString = null;
+            if(acceptHeader.equalsIgnoreCase("plain/text")){
+            	inputString = postBody;
+            }
+            else {
+				inputString = firstPlaintext.getObject().asLiteral().getString();
+			}
+
+            // get shell script (with inputString, language, algorithm, summarylength) and write result to resultString
+            // eventually replace with a RESTful service endpoint
+            //System.out.println("I am in summarisation 1");
+            eSummaryService sumService = new eSummaryService();
+            String resultString = sumService.executeCommandAbstract(inputString, language); //abstract summarisation
+          
+
+
+            if (!model.getNsPrefixMap().containsValue(RDFConstants.itsrdfPrefix)) {
+                model.setNsPrefix("itsrdf", RDFConstants.itsrdfPrefix);
+            }
+
+            Literal literal = model.createLiteral(resultString, language);
+            //System.out.println("@@Status: " + literal.getString());
+            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            //System.out.println("I am in summarisation 2");
+
+            return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
+        }catch (FREMEHttpException e){
+            logger.error("Error", e);
+            throw e;
+        } catch (Exception e) {
+            logger.error("Error", e);
+            throw new BadRequestException(e.getMessage());
+        }
+    }
 }
