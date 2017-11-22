@@ -113,7 +113,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
-            if(acceptHeader.equalsIgnoreCase("text/plain")){
+            if(contentTypeHeader.equalsIgnoreCase("text/plain")){
             	inputString = postBody;
             }
             else {
@@ -198,7 +198,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
-            if(acceptHeader.equalsIgnoreCase("text/plain")){
+            if(contentTypeHeader.equalsIgnoreCase("text/plain")){
             	inputString = postBody;
             }
             else {
@@ -281,7 +281,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Statement firstPlaintext = rdfConversionService.extractFirstPlaintext(model);
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
-            if(acceptHeader.equalsIgnoreCase("text/plain")){
+            if(contentTypeHeader.equalsIgnoreCase("text/plain")){
             	inputString = postBody;
             }
             else {
