@@ -111,11 +111,13 @@ public class eSummaryService {
                 output.append(line);
                 //System.out.println("arre:" + line + "\n");
             }
+	  output.append(" End of Summary!");
         } catch (Exception e) {
             e.printStackTrace();
         }
         return output.toString();
     }
+	
 	
 	// Abstract Summarisation
 	public String executeCommandAbstract(String inputDoc, String dLang){
@@ -170,6 +172,7 @@ public class eSummaryService {
                 output.append(line);
                 //System.out.println("arre:" + line + "\n");
             }
+	   output.append(" End of Summary!");
         } catch (Exception e) {
             e.printStackTrace();
         }
