@@ -111,7 +111,7 @@ public class eSummaryService {
                 output.append(line);
                 //System.out.println("arre:" + line + "\n");
             }
-	  output.append(" End of Summary!");
+	  //output.append(" End of Summary!");
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -172,7 +172,7 @@ public class eSummaryService {
                 output.append(line);
                 //System.out.println("arre:" + line + "\n");
             }
-	   output.append(" End of Summary!");
+	   //output.append(" End of Summary!");
         } catch (Exception e) {
             e.printStackTrace();
         }
