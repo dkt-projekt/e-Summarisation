@@ -114,7 +114,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
             if(contentTypeHeader.equalsIgnoreCase("text/plain")){
-            	inputString = postBody;
+            	inputString = new String(postBody);
             }
             else {
 				inputString = firstPlaintext.getObject().asLiteral().getString();
@@ -199,7 +199,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
             if(contentTypeHeader.equalsIgnoreCase("text/plain")){
-            	inputString = postBody;
+            	inputString = new String(postBody);
             }
             else {
 				inputString = firstPlaintext.getObject().asLiteral().getString();
@@ -282,7 +282,7 @@ public class eSummaryStandAlone extends BaseRestController {
             Resource subject = firstPlaintext.getSubject();
             String inputString = null;
             if(contentTypeHeader.equalsIgnoreCase("text/plain")){
-            	inputString = postBody;
+            	inputString = new String(postBody);
             }
             else {
 				inputString = firstPlaintext.getObject().asLiteral().getString();
