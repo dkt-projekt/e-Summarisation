@@ -134,7 +134,7 @@ public class eSummaryStandAlone extends BaseRestController {
 
             Literal literal = model.createLiteral(resultString, language);
             //System.out.println("@@Status: " + literal.getString());
-            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "summary"), literal);
             //System.out.println("I am in summarisation 2");
 
             return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
@@ -219,7 +219,7 @@ public class eSummaryStandAlone extends BaseRestController {
 
             Literal literal = model.createLiteral(resultString, language);
             //System.out.println("@@Status: " + literal.getString());
-            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "summary"), literal);
             //System.out.println("I am in summarisation 2");
 
             return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
@@ -302,7 +302,7 @@ public class eSummaryStandAlone extends BaseRestController {
 
             Literal literal = model.createLiteral(resultString, language);
             //System.out.println("@@Status: " + literal.getString());
-            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "target"), literal);
+            subject.addLiteral(model.getProperty(RDFConstants.itsrdfPrefix + "summary"), literal);
             //System.out.println("I am in summarisation 2");
 
             return restHelper.createSuccessResponse(model, nifParameters.getOutformat());
